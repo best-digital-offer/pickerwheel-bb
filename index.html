@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PickerWheel.world - Random Picker, Wheel Spinner & Decision Maker</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFD166;
+            --light: #F7FFF7;
+            --dark: #1A535C;
+            --text: #333;
+            --text-light: #6c757d;
+            --gradient: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            --gradient-alt: linear-gradient(135deg, #4ECDC4, #FFD166);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f7f7;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+        }
+        
+        .logo-icon {
+            font-size: 2.8rem;
+            animation: spin 10s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: var(--primary);
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--dark);
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+        
+        .intro {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .intro::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-alt);
+            border-radius: 0 0 0 100px;
+            opacity: 0.1;
+        }
+        
+        .intro p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+        
+        .highlight {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+        
+        .benefit-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .benefit-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .use-cases {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+        
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .use-case-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 25px;
+            transition: transform 0.3s ease;
+        }
+        
+        .use-case-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .use-case-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .use-case-icon {
+            font-size: 1.5rem;
+        }
+        
+        .comparison {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+        
+        .comparison-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+        
+        .comparison-item {
+            flex: 1;
+            min-width: 250px;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .comparison-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .updates-section {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .updates-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .update-item {
+            background: var(--light);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            .feature-card {
+                padding: 20px;
+            }
+            
+            .intro, .use-cases, .comparison {
+                padding: 25px;
+            }
+            
+            .comparison-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">🎡</span>
+                PickerWheel.world
+            </div>
+            <p class="tagline">Simple, fun, and fast random decision wheel that helps you spin, pick choices, make decisions, and run giveaways with ease.</p>
+            <a href="https://pickerwheel.world" class="cta-button">Try It Now</a>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section>
+            <div class="intro">
+                <h2 class="section-title">🎡 What Is PickerWheel.world?</h2>
+                <p>PickerWheel.world is a <span class="highlight">free online spinning wheel</span> where users can add custom options and spin to choose a winner. Everything works inside your browser — no login required.</p>
+                <p>Perfect for giveaway selection, classroom activities, random name picking, choosing tasks or chores, team selections, and lucky draw games.</p>
+                <p style="text-align: center; margin-top: 25px;">
+                    <a href="https://pickerwheel.world/spin" class="cta-button" style="background: var(--accent); color: var(--dark);">Start Spinning</a>
+                </p>
+            </div>
+            
+            <h2 class="section-title">⭐ Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">∞</div>
+                    <h3 class="feature-title">Unlimited Custom Options</h3>
+                    <p>Add as many choices as you want. Perfect for lists, students, teams, products, names, challenges, etc.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎬</div>
+                    <h3 class="feature-title">Smooth Animations</h3>
+                    <p>Realistic spinning animation with sound effects for a more engaging experience.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📶</div>
+                    <h3 class="feature-title">Fully Offline-Capable</h3>
+                    <p>Once loaded, it works even without internet due to local browser caching.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎥</div>
+                    <h3 class="feature-title">Ideal for Content Creators</h3>
+                    <p>YouTubers, teachers, and streamers use it for giveaways, random selection events, classroom games, and live streams.</p>
+                </div>
+            </div>
+            
+            <h2 class="section-title">🔥 Benefits of PickerWheel.world</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">💯</div>
+                    <p>100% free</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🚫</div>
+                    <p>No ads that interrupt usage</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📱</div>
+                    <p>Works on phones, tablets, desktops</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔒</div>
+                    <p>No data stored</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">⚡</div>
+                    <p>Instant loading</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">👩‍🏫</div>
+                    <p>Teacher & student-friendly</p>
+                </div>
+            </div>
+            
+            <h2 class="section-title">🧩 Use Cases</h2>
+            <div class="use-cases">
+                <div class="use-cases-grid">
+                    <div class="use-case-card">
+                        <h3 class="use-case-title"><span class="use-case-icon">👩‍🏫</span> Teachers</h3>
+                        <p>Random student selector for classroom activities and fair participation.</p>
+                    </div>
+                    <div class="use-case-card">
+                        <h3 class="use-case-title"><span class="use-case-icon">🎥</span> YouTubers</h3>
+                        <p>Giveaway winner picker for engaging content and fair selection.</p>
+                    </div>
+                    <div class="use-case-card">
+                        <h3 class="use-case-title"><span class="use-case-icon">🎮</span> Gamers</h3>
+                        <p>Random challenge wheel for exciting gameplay variations.</p>
+                    </div>
+                    <div class="use-case-card">
+                        <h3 class="use-case-title"><span class="use-case-icon">💼</span> Businesses</h3>
+                        <p>Team picker or task assignment for fair distribution.</p>
+                    </div>
+                    <div class="use-case-card">
+                        <h3 class="use-case-title"><span class="use-case-icon">👨‍👩‍👧‍👦</span> Families</h3>
+                        <p>Fun decision wheel for chores, activities, or dinner choices.</p>
+                    </div>
+                    <div class="use-case-card">
+                        <h3 class="use-case-title"><span class="use-case-icon">📚</span> Students</h3>
+                        <p>Yes/No decision maker for quick and fair choices.</p>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 25px;">
+                    <a href="https://pickerwheel.world" class="cta-button">Explore Live</a>
+                </p>
+            </div>
+            
+            <div class="comparison">
+                <h2 class="section-title">📌 Why It Is Better Than App-Based Pickers</h2>
+                <div class="comparison-content">
+                    <div class="comparison-item">
+                        <h3 class="comparison-title">PickerWheel.world</h3>
+                        <p>✅ No installation required</p>
+                        <p>✅ Works instantly in browser</p>
+                        <p>✅ No storage permissions needed</p>
+                        <p>✅ Accessible on any device</p>
+                        <p>✅ Always up to date</p>
+                    </div>
+                    <div class="comparison-item">
+                        <h3 class="comparison-title">App-Based Pickers</h3>
+                        <p>❌ Requires download & installation</p>
+                        <p>❌ Takes up device storage</p>
+                        <p>❌ Needs permissions</p>
+                        <p>❌ Device-specific limitations</p>
+                        <p>❌ Requires updates</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="updates-section">
+                <h2 class="section-title">🛠 Future Updates</h2>
+                <p>We're constantly improving PickerWheel.world with new features!</p>
+                <div class="updates-list">
+                    <div class="update-item">Multi-wheel mode</div>
+                    <div class="update-item">Weighted choices</div>
+                    <div class="update-item">Export/import lists</div>
+                    <div class="update-item">Shareable spin links</div>
+                </div>
+                <p style="margin-top: 25px;">
+                    <a href="https://pickerwheel.world" class="cta-button" style="background: var(--primary); color: white;">Try It Now</a>
+                </p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>© 2023 PickerWheel.world - Random Picker, Wheel Spinner & Decision Maker</p>
+            <p style="margin-top: 10px; opacity: 0.8;">Spin, pick, and decide with our free online wheel spinner tool.</p>
+        </div>
+    </footer>
+</body>
+</html>
